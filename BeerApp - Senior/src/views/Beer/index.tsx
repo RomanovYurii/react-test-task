@@ -1,15 +1,51 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Beer as IBeer } from '../../types';
 import { fetchData } from './utils';
 import { useParams } from 'react-router-dom';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
+import { SAVED_BEERS_KEY } from '../../utils';
+import { Star, StarBorder } from '@mui/icons-material';
+import { orange } from '@mui/material/colors';
 
 const Beer = () => {
   const { id } = useParams();
   const [beer, setBeer] = useState<IBeer>();
+  const [savedList, setSavedList] = useState<{ [key: string]: IBeer }>({});
 
   // eslint-disable-next-line
   useEffect(fetchData.bind(this, setBeer, id), [id]);
+  // ToDo: move to hook
+  useEffect(() => {
+    const initSavedList = async () => {
+      const data = JSON.parse(
+        (await localStorage.getItem(SAVED_BEERS_KEY)) || '{}'
+      );
+      setSavedList(data);
+    };
+
+    initSavedList();
+  }, []);
+
+  const isSaved = useMemo(
+    () => beer && beer.id && Object.keys(savedList).includes(beer.id),
+    [savedList]
+  );
+  // ToDo: dedupe
+  const handleSavedClick = (IBeer: boolean, beer?: IBeer) => {
+    if (!beer) {
+      return;
+    }
+    if (IBeer) {
+      const newSavedList = { ...savedList, [beer.id]: beer };
+      setSavedList({ ...newSavedList });
+      localStorage.setItem(SAVED_BEERS_KEY, JSON.stringify(newSavedList));
+    } else {
+      const newSavedList = { ...savedList };
+      delete newSavedList[beer.id];
+      setSavedList({ ...newSavedList });
+      localStorage.setItem(SAVED_BEERS_KEY, JSON.stringify(newSavedList));
+    }
+  };
 
   return (
     <article>
@@ -18,6 +54,18 @@ const Beer = () => {
           <h1>Beer name: {beer?.name}</h1>
         </header>
         <main>
+          <div
+            onClick={() => handleSavedClick(!isSaved, beer)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              color: orange[800],
+              cursor: 'pointer',
+            }}
+          >
+            {isSaved ? <Star /> : <StarBorder />}{' '}
+            {isSaved ? 'Remove from saved' : 'Add to saved'}
+          </div>
           <p>
             <b>Type: </b> {beer?.brewery_type}
           </p>

@@ -4,8 +4,7 @@ import Router from './router';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from './styles/theme';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import { DBContextProvider } from './db';
+import serviceWorkerRegistration from './serviceWorkerRegistration';
 import './styles/global.css';
 
 const root = ReactDOM.createRoot(
@@ -15,11 +14,9 @@ root.render(
   <React.StrictMode>
     <CssBaseline />
     <ThemeProvider theme={theme}>
-      <DBContextProvider>
-        <Router />
-      </DBContextProvider>
+      <Router />
     </ThemeProvider>
   </React.StrictMode>
 );
 
-serviceWorkerRegistration.register();
+serviceWorkerRegistration();

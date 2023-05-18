@@ -1,0 +1,1 @@
+export const SAVED_BEERS_KEY = 'SAVED_BEERS_KEY';
