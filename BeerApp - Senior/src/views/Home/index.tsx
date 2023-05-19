@@ -12,7 +12,6 @@ const Home = () => {
 
   // eslint-disable-next-line
   useEffect(fetchData.bind(this, setBeerList), []);
-  // ToDo: move to hook
   useEffect(() => {
     const initSavedList = async () => {
       const data = JSON.parse(
@@ -24,7 +23,6 @@ const Home = () => {
     initSavedList();
   }, []);
 
-  // ToDo: move to hook
   const handleListItemClick = (
     e: ChangeEvent<HTMLInputElement>,
     beer: Beer

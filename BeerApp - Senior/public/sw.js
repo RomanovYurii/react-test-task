@@ -22,9 +22,21 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  const requestUrl = new URL(event.request.url);
+
+  if (requestUrl.pathname.startsWith('/beer/')) {
     event.respondWith(
-      fetch(event.request).catch(function() {
+      fetch(event.request).catch(() => {
+        // Handle network errors
         return caches.match(event.request);
       })
     );
+  } else {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        // Return cached response or fetch from network
+        return response || fetch(event.request);
+      })
+    );
+  }
 });
