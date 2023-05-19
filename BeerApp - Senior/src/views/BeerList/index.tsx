@@ -17,6 +17,7 @@ import {
 import SportsBar from '@mui/icons-material/SportsBar';
 import { useNavigate } from 'react-router-dom';
 import _orderBy from 'lodash/orderBy';
+import { BEER_LIST_KEY } from '../../utils';
 
 const BeerList = () => {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ const BeerList = () => {
         sortOptions.order
       )
     );
-  }, [filterValue, sortOptions, pagination]);
+  }, [filterValue, sortOptions, pagination, beerList]);
 
   useEffect(() => {
     setPagination((prev) => ({

@@ -1,6 +1,7 @@
 import { getBeerList } from '../../api';
 import { Beer } from '../../types';
 import handle from '../../utils/error';
+import { BEER_LIST_KEY } from '../../utils';
 
 const fetchData = (setData: (data: Array<Beer>) => void) => {
   (async () => {
@@ -9,6 +10,7 @@ const fetchData = (setData: (data: Array<Beer>) => void) => {
       setData(response.data);
     } catch (error) {
       handle(error);
+      setData(JSON.parse((await localStorage.getItem(BEER_LIST_KEY)) || '{}'));
     }
   })();
 };

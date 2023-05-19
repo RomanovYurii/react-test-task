@@ -16,6 +16,8 @@ const Offline = () => {
     };
 
     useEffect(() => {
+        setIsOnline(navigator.onLine);
+        setShowAlert(!navigator.onLine);
         window.addEventListener('online', setOnline);
         window.addEventListener('offline', setOffline);
 
@@ -26,17 +28,17 @@ const Offline = () => {
     }, []);
 
     return !isOnline && showAlert ? (
-        <Alert
-            className={styles.offlineAlert}
-            severity="success"
-            onClose={() => setShowAlert(false)}
-        >
-            <AlertTitle>You are offline... but it's fine!</AlertTitle>
+      <Alert
+        className={styles.offlineAlert}
+        severity="success"
+        onClose={() => setShowAlert(false)}
+      >
+          <AlertTitle>You are offline... but it's fine!</AlertTitle>
 
-            <main>
-                <span>This application is a PWA which allows for an offline use!</span>
-            </main>
-        </Alert>
+          <main>
+              <span>This application is a PWA which allows for an offline use!</span>
+          </main>
+      </Alert>
     ) : null;
 };
 
