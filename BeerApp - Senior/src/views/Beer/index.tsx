@@ -28,7 +28,7 @@ const Beer = () => {
 
   const isSaved = useMemo(
     () => beer && beer.id && Object.keys(savedList).includes(beer.id),
-    [savedList]
+    [beer, savedList]
   );
   // ToDo: dedupe
   const handleSavedClick = (IBeer: boolean, beer?: IBeer) => {
